@@ -717,7 +717,7 @@ static void __iommu_dma_unmap_iova(struct device *dev, dma_addr_t dma_addr,
 
 	if (free_iova) {
 		/* dma_addr is the last page aligned byte in the range, we need to give it the first. Hacky, but for now just subtract 63 * 4096, assuming free_iova is only set on the last one */
-		dma_addr -= 63 * 4096;
+		//dma_addr -= 63 * 4096;
 		iommu_dma_free_iova(cookie, dma_addr, iova_size, &iotlb_gather);
 	}
 }

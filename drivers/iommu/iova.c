@@ -22,12 +22,12 @@
 //TODO: Add iova log function
 int add_iova_log(unsigned long pfn, int source, bool ins, struct iova_domain *iovad) {
 	//u64 timestamp = ktime_get_ns();
-	trace_printk("IL:%lu,%d,%d,%p\n",
+	/*trace_printk("IL:%lu,%d,%d,%p\n",
             pfn,
             source,
             ins,
 	    iovad
-            );
+            );*/
 	return 0;
 }
 

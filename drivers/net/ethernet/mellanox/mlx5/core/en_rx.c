@@ -313,8 +313,11 @@ void mlx5e_page_dma_unmap(struct mlx5e_rq *rq, struct page *page, size_t iova_si
 	//printk("debug: page_unmap, iova_size: %lu, iova: %llu\n", iova_size, dma_addr);
 
 	if (iova_size) {
-		dma_unmap_page_attrs_iova(rq->pdev, dma_addr, PAGE_SIZE, iova_size, free_iova, rq->buff.map_dir,
-			     DMA_ATTR_SKIP_CPU_SYNC);
+		if (free_iova) {
+			dma_addr -= 63 * 4096;
+			dma_unmap_page_attrs_iova(rq->pdev, dma_addr, PAGE_SIZE * 64, iova_size, free_iova, rq->buff.map_dir,
+				     DMA_ATTR_SKIP_CPU_SYNC);
+		}
 	} else {
 		//printk("debug: not_iova_size, iova_size: %lu, iova: %llu\n", iova_size, dma_addr);
 		dma_unmap_page_attrs(rq->pdev, dma_addr, PAGE_SIZE, rq->buff.map_dir,
