@@ -495,7 +495,6 @@ index 24de37b79..bab114f3c 100644
 -	dma_unmap_page_attrs(rq->pdev, dma_addr, PAGE_SIZE, rq->buff.map_dir,
 +	if (iova_size) {
 +		if (free_iova) {
-+			dma_addr -= 63 * 4096;
 +			dma_unmap_page_attrs_iova(rq->pdev, dma_addr, PAGE_SIZE * 64, iova_size, free_iova, rq->buff.map_dir,
 +				     DMA_ATTR_SKIP_CPU_SYNC);
 +		}
@@ -567,7 +566,7 @@ index 24de37b79..bab114f3c 100644
 +				//printk("debug: yes_batch, iova_size: %lu, iova: %llu, addr: %llu", dma_info[i].iova_size,dma_info[i].iova,dma_info[i].addr);
 +				dma_info[i].iova_size = 4096 * 64;
 +				dma_info[i].batch_iova = true;
-+				dma_info[i].free_iova = i == (MLX5_MPWRQ_PAGES_PER_WQE - 1); /* only want to free once at the end. It will automatically subtract to get the beginning */
++				dma_info[i].free_iova = i == 0; /* unmap/inv once at the beginning before releasing any pages */
 +				mlx5e_page_release(rq, &dma_info[i], false);
 +			} else { 
 +				//printk("debug: no_batch, iova: %llu, addr: %llu, iova_size: %lu", dma_info[i].iova, dma_info[i].addr, dma_info[i].iova_size);
